@@ -9,35 +9,34 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterMain extends RecyclerView.Adapter<ViewHolderMain> {
+class AdapterMain extends RecyclerView.Adapter<ViewHolderMain> {
 
     private List<ModelMain> list = new ArrayList<>();
-    private Context context, parentContext;
-    private boolean[] isSelected;
-    private int pos;
+    private Context context;
+    private List<Boolean> isSelected;
 
-    public AdapterMain(List<ModelMain> list, Context context) {
+    AdapterMain(List<ModelMain> list, Context context) {
         this.list = list;
         this.context = context;
-        isSelected = new boolean[list.size()];
     }
 
     @Override
     public ViewHolderMain onCreateViewHolder(ViewGroup parent, int viewType) {
-        parentContext = parent.getContext();
+        Context parentContext = parent.getContext();
+        isSelected = new ArrayList<>();
         for(int i = 0; i<list.size(); i++){
-            isSelected[i] = false;
+            isSelected.add(false);
         }
         View v = LayoutInflater.from(parentContext).inflate(R.layout.row_layout, parent, false);
         return new ViewHolderMain(v);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onBindViewHolder(final ViewHolderMain holder, final int position) {
-        pos = position;
-        holder.text1.setText(list.get(pos).getText1());
-        holder.text2.setText(list.get(pos).getText2());
-        if(isSelected[position]){
+        holder.text1.setText(list.get(position).getText1());
+        holder.text2.setText(list.get(position).getText2());
+        if(isSelected.get(position)){
             holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
         }
         else {
@@ -47,13 +46,13 @@ public class AdapterMain extends RecyclerView.Adapter<ViewHolderMain> {
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isSelected[pos]){
+                if(isSelected.get(position)){
                     holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.white));
-                    isSelected[pos] = false;
+                    isSelected.set(position, false);
                 }
                 else {
                     holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
-                    isSelected[pos] = true;
+                    isSelected.set(position, true);
                 }
             }
         });
