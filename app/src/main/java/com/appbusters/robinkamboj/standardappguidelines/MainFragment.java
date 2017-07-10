@@ -70,4 +70,15 @@ public class MainFragment extends Fragment {
         outState.putBooleanArray("selected_items", mSelectedItems);
         super.onSaveInstanceState(outState);
     }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            mSelectedItems = savedInstanceState.getBooleanArray("selected_items");
+
+            assert mSelectedItems != null;
+            Log.e("ONVIEWRESTORED", " " + mSelectedItems[0]);
+        }
+    }
 }
