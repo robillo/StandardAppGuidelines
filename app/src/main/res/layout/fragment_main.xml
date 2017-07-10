@@ -6,18 +6,20 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0sp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:id="@+id/recycler">
 
     </android.support.v7.widget.RecyclerView>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
+        android:text="@string/selected_items"
         android:textSize="15sp"
         android:fontFamily="sans-serif-smallcaps"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:background="?attr/selectableItemBackground"/>
+        android:background="?attr/selectableItemBackground"
+        android:id="@+id/selected"/>
 
 </LinearLayout>
