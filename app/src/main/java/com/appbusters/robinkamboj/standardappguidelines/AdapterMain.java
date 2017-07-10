@@ -13,7 +13,7 @@ class AdapterMain extends RecyclerView.Adapter<ViewHolderMain> {
 
     private List<ModelMain> list = new ArrayList<>();
     private Context context;
-    private List<Boolean> isSelected;
+    private ArrayList<Boolean> isSelected;
 
     AdapterMain(List<ModelMain> list, Context context) {
         this.list = list;
@@ -61,5 +61,9 @@ class AdapterMain extends RecyclerView.Adapter<ViewHolderMain> {
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public ArrayList<Boolean> getIsSelected() {
+        return isSelected;
     }
 }
