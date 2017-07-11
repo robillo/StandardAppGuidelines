@@ -33,6 +33,7 @@ public class MainFragment extends Fragment {
     private static boolean isShowingDialog = false;
     AlertDialog.Builder builder;
     AlertDialog dialog;
+    int flagAfterStop;
 
     public static MainFragment newInstance(){
         return new MainFragment();
@@ -46,6 +47,7 @@ public class MainFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         builder = new AlertDialog.Builder(getActivity());
+        flagAfterStop = 0;
         for(int i=0; i<30; i++){
             list.add(new ModelMain("Text One " + i, "Text Two " + i));
         }
@@ -65,6 +67,7 @@ public class MainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
         selectView = (Button) v.findViewById(R.id.selected);
+        flagAfterStop = 0;
 
         adapter = new AdapterMain(list, getActivity(), isSelected);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -77,10 +80,6 @@ public class MainFragment extends Fragment {
             }
         });
 
-        return v;
-    }
-
-    private void showDialog(){
         final String[] temp = {"Words: "};
         for(int i=0; i<list.size(); i++){
             if(isSelected.get(i)){
@@ -93,24 +92,35 @@ public class MainFragment extends Fragment {
                 .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        isShowingDialog = false;
                         dialog.dismiss();
+                        isShowingDialog = false;
                     }
                 })
                 .setNegativeButton("Nope", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        isShowingDialog = false;
                         dialog.dismiss();
+                        isShowingDialog = false;
                     }
                 });
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-//                isShowingDialog = false;
-                Log.e("DISMISS DIALOG LISTENER", "CALLED");
+                if(flagAfterStop == 0){
+                    isShowingDialog = false;
+                    Log.e("DISMISSED CALLED", "BEFORE ONSTOP");
+                }
+                else {
+                    isShowingDialog = true;
+                    Log.e("DISMISSED CALLED", "AFTER ONSTOP");
+                }
             }
         });
+
+        return v;
+    }
+
+    private void showDialog(){
         dialog = builder.show();
     }
 
@@ -120,7 +130,7 @@ public class MainFragment extends Fragment {
         Log.e("ONDESTROY", "CALLED");
         Log.e("ISSHOWING DIALOG", String.valueOf(isShowingDialog));
         if(dialog!=null && dialog.isShowing()){
-            dialog.dismiss();
+            dialog.cancel();
         }
     }
 
@@ -130,8 +140,9 @@ public class MainFragment extends Fragment {
         Log.e("ONSTOP", "CALLED");
         Log.e("ISSHOWING DIALOG", String.valueOf(isShowingDialog));
         if(dialog!=null && dialog.isShowing()){
-            dialog.dismiss();
+            dialog.cancel();
         }
+        flagAfterStop = 1;
     }
 
     @Override
@@ -140,7 +151,7 @@ public class MainFragment extends Fragment {
         Log.e("ONPAUSE", "CALLED");
         Log.e("ISSHOWING DIALOG", String.valueOf(isShowingDialog));
         if(dialog!=null && dialog.isShowing()){
-            dialog.dismiss();
+            dialog.cancel();
         }
     }
 
@@ -170,12 +181,11 @@ public class MainFragment extends Fragment {
          for(int i=0; i<adapter.getIsSelected().size(); i++){
              mSelectedItems[i] = adapter.getIsSelected().get(i);
          }
+         Log.e("ONSAVEINSTANCESTATE", "NOW");
         outState.putBooleanArray("selected_items", mSelectedItems);
         outState.putBoolean("is_showing_dialog", isShowingDialog);
         super.onSaveInstanceState(outState);
     }
-
-
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
