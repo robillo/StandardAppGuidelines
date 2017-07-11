@@ -15,18 +15,15 @@ class AdapterMain extends RecyclerView.Adapter<ViewHolderMain> {
     private Context context;
     private ArrayList<Boolean> isSelected;
 
-    AdapterMain(List<ModelMain> list, Context context) {
+    AdapterMain(List<ModelMain> list, Context context, ArrayList<Boolean> isSelected) {
         this.list = list;
         this.context = context;
+        this.isSelected = isSelected;
     }
 
     @Override
     public ViewHolderMain onCreateViewHolder(ViewGroup parent, int viewType) {
         Context parentContext = parent.getContext();
-        isSelected = new ArrayList<>();
-        for(int i = 0; i<list.size(); i++){
-            isSelected.add(false);
-        }
         View v = LayoutInflater.from(parentContext).inflate(R.layout.row_layout, parent, false);
         return new ViewHolderMain(v);
     }

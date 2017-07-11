@@ -26,6 +26,7 @@ public class MainFragment extends Fragment {
     Button selectedItems;
     List<ModelMain> list = new ArrayList<>();
     boolean[] mSelectedItems;
+    ArrayList<Boolean> isSelected = new ArrayList<>();
 
     public static MainFragment newInstance(){
         return new MainFragment();
@@ -40,8 +41,12 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Log.e("ONCREATE", "CALLED");
+
         for(int i=0; i<30; i++){
             list.add(new ModelMain("Text One " + i, "Text Two " + i));
+        }
+        for(int i = 0; i<list.size(); i++){
+            isSelected.add(false);
         }
     }
 
@@ -54,7 +59,7 @@ public class MainFragment extends Fragment {
 
         Log.e("OCV", "CALLED");
 
-        adapter = new AdapterMain(list, getActivity());
+        adapter = new AdapterMain(list, getActivity(), isSelected);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
@@ -79,6 +84,11 @@ public class MainFragment extends Fragment {
 
             assert mSelectedItems != null;
             Log.e("ONVIEWRESTORED", " " + mSelectedItems[0]);
+
+            isSelected = new ArrayList<>();
+            for(int i = 0; i<list.size(); i++){
+                isSelected.add(mSelectedItems[i]);
+            }
         }
     }
 }
