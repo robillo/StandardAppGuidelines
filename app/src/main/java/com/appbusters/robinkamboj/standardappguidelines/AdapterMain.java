@@ -11,7 +11,7 @@ import java.util.List;
 
 class AdapterMain extends RecyclerView.Adapter<ViewHolderMain> {
 
-    private List<ModelMain> list = new ArrayList<>();
+    List<ModelMain> list = new ArrayList<>();
     private Context context;
     private ArrayList<Boolean> isSelected;
 
@@ -60,7 +60,7 @@ class AdapterMain extends RecyclerView.Adapter<ViewHolderMain> {
         return list.size();
     }
 
-    public ArrayList<Boolean> getIsSelected() {
+    ArrayList<Boolean> getIsSelected() {
         return isSelected;
     }
 }
