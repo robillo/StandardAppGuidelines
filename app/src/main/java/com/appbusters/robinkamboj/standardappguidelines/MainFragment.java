@@ -40,8 +40,6 @@ public class MainFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.e("ONCREATE", "CALLED");
-
         for(int i=0; i<30; i++){
             list.add(new ModelMain("Text One " + i, "Text Two " + i));
         }
@@ -56,8 +54,6 @@ public class MainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
         selectedItems = (Button) v.findViewById(R.id.selected);
-
-        Log.e("OCV", "CALLED");
 
         adapter = new AdapterMain(list, getActivity(), isSelected);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -82,10 +78,6 @@ public class MainFragment extends Fragment {
         if (savedInstanceState != null) {
             mSelectedItems = savedInstanceState.getBooleanArray("selected_items");
 
-            assert mSelectedItems != null;
-            Log.e("ONVIEWRESTORED", " " + mSelectedItems[0]);
-
-            isSelected = new ArrayList<>();
             for(int i = 0; i<list.size(); i++){
                 isSelected.add(mSelectedItems[i]);
             }
