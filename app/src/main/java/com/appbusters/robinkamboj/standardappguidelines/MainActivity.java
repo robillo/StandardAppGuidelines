@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -25,5 +27,10 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
+    }
+
+    public void showMyDialog(ArrayList<String> list){
+        MyDialogFragment fragment = MyDialogFragment.newInstance(list);
+        fragment.show(getSupportFragmentManager(), "TAG");
     }
 }

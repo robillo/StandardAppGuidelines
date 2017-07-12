@@ -27,7 +27,8 @@ public class MainFragment extends Fragment {
     RecyclerView recyclerView;
     AdapterMain adapter;
     Button selectView;
-    List<ModelMain> list = new ArrayList<>();
+    ArrayList<ModelMain> list = new ArrayList<>();
+    ArrayList<String> dialogList = new ArrayList<>();
     boolean[] mSelectedItems;
     ArrayList<Boolean> isSelected = new ArrayList<>();
     private static boolean isShowingDialog = false;
@@ -54,11 +55,6 @@ public class MainFragment extends Fragment {
         for(int i = 0; i<list.size(); i++){
             isSelected.add(false);
         }
-        Log.e("ONCREATE", "CALLED");
-        Log.e("ISSHOWING DIALOG", String.valueOf(isShowingDialog));
-        if(dialog!=null && isShowingDialog && !dialog.isShowing()){
-            showDialog();
-        }
     }
 
     @Override
@@ -76,7 +72,8 @@ public class MainFragment extends Fragment {
         selectView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog();
+                addDialogListItems();
+                ((MainActivity) getActivity()).showMyDialog(dialogList);
             }
         });
 
@@ -86,92 +83,13 @@ public class MainFragment extends Fragment {
                 temp[0] = temp[0].concat(adapter.list.get(i).getText1());
             }
         }
-        isShowingDialog = true;
-        builder.setTitle("Selected Items:")
-                .setMessage(temp[0])
-                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialog.dismiss();
-                        isShowingDialog = false;
-                    }
-                })
-                .setNegativeButton("Nope", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialog.dismiss();
-                        isShowingDialog = false;
-                    }
-                });
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                if(flagAfterStop == 0){
-                    isShowingDialog = false;
-                    Log.e("DISMISSED CALLED", "BEFORE ONSTOP");
-                }
-                else {
-                    isShowingDialog = true;
-                    Log.e("DISMISSED CALLED", "AFTER ONSTOP");
-                }
-            }
-        });
 
         return v;
     }
 
-    private void showDialog(){
-        dialog = builder.show();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.e("ONDESTROY", "CALLED");
-        Log.e("ISSHOWING DIALOG", String.valueOf(isShowingDialog));
-        if(dialog!=null && dialog.isShowing()){
-            dialog.cancel();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.e("ONSTOP", "CALLED");
-        Log.e("ISSHOWING DIALOG", String.valueOf(isShowingDialog));
-        if(dialog!=null && dialog.isShowing()){
-            dialog.cancel();
-        }
-        flagAfterStop = 1;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.e("ONPAUSE", "CALLED");
-        Log.e("ISSHOWING DIALOG", String.valueOf(isShowingDialog));
-        if(dialog!=null && dialog.isShowing()){
-            dialog.cancel();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e("ONRESUME", "CALLED");
-        Log.e("ISSHOWING DIALOG", String.valueOf(isShowingDialog));
-        if(dialog!=null && isShowingDialog && !dialog.isShowing()){
-            showDialog();
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.e("ONSTART", "CALLED");
-        Log.e("ISSHOWING DIALOG", String.valueOf(isShowingDialog));
-        if(dialog!=null && isShowingDialog && !dialog.isShowing()){
-            showDialog();
+    private void addDialogListItems() {
+        for (int i=0; i<list.size(); i++){
+            dialogList.add(list.get(i).getText1() + "  ");
         }
     }
 
@@ -181,9 +99,7 @@ public class MainFragment extends Fragment {
          for(int i=0; i<adapter.getIsSelected().size(); i++){
              mSelectedItems[i] = adapter.getIsSelected().get(i);
          }
-         Log.e("ONSAVEINSTANCESTATE", "NOW");
         outState.putBooleanArray("selected_items", mSelectedItems);
-        outState.putBoolean("is_showing_dialog", isShowingDialog);
         super.onSaveInstanceState(outState);
     }
 
@@ -192,7 +108,6 @@ public class MainFragment extends Fragment {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
             mSelectedItems = savedInstanceState.getBooleanArray("selected_items");
-            isShowingDialog = savedInstanceState.getBoolean("is_showing_dialog");
             for(int i = 0; i<list.size(); i++){
                 isSelected.add(mSelectedItems[i]);
             }
