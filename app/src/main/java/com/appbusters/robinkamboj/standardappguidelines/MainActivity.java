@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    public void showMyDialog(ArrayList<String> list){
-        MyDialogFragment fragment = MyDialogFragment.newInstance(list);
+    public void showMyDialog(String temp){
+        MyDialogFragment fragment = MyDialogFragment.newInstance(temp);
         fragment.show(getSupportFragmentManager(), "TAG");
     }
 }

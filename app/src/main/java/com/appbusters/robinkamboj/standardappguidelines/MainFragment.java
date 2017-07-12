@@ -73,18 +73,21 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 addDialogListItems();
-                ((MainActivity) getActivity()).showMyDialog(dialogList);
+                ((MainActivity) getActivity()).showMyDialog(computeStringList());
             }
         });
 
+        return v;
+    }
+
+    private String computeStringList() {
         final String[] temp = {"Words: "};
         for(int i=0; i<list.size(); i++){
             if(isSelected.get(i)){
-                temp[0] = temp[0].concat(adapter.list.get(i).getText1());
+                temp[0] = temp[0].concat(adapter.list.get(i).getText1() + "  ");
             }
         }
-
-        return v;
+        return temp[0];
     }
 
     private void addDialogListItems() {

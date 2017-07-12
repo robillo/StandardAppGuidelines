@@ -13,12 +13,12 @@ import java.util.ArrayList;
 
 public class MyDialogFragment extends DialogFragment{
 
-    ArrayList<String> list;
+    String temp = "->";
 
-    public static MyDialogFragment newInstance(ArrayList<String> list){
+    public static MyDialogFragment newInstance(String temp){
         MyDialogFragment fragment = new MyDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putStringArrayList("list", list);
+        bundle.putString("list", temp);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -27,9 +27,7 @@ public class MyDialogFragment extends DialogFragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        if(args!=null){
-            list = args.getStringArrayList("list");
-        }
+        if(args!=null) temp = temp.concat(args.getString("list"));
     }
 
     @NonNull
@@ -38,7 +36,7 @@ public class MyDialogFragment extends DialogFragment{
         return new AlertDialog.Builder(getActivity())
                 .setIcon(R.mipmap.ic_launcher_round)
                 .setTitle("Test Dialog")
-                .setMessage("This Is A Test Dialog With Num = " + list.get(0))
+                .setMessage("This Is A Test Dialog With Selected Items = " + temp)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(getActivity(), "Pressed OK", Toast.LENGTH_SHORT).show();
